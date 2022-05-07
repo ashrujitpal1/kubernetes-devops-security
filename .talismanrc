@@ -1,0 +1,7 @@
+fileignoreconfig:
+- filename: sec_files/file2
+  checksum: 31d2d1f837245d12f5645da5379fb9aec38fabed1e2026206ae73f05b0ac918a
+- filename: sec_files/file3
+  checksum: d38f8666bb90243419a19d016de3799acc62878eb489e36fdd1d9a51aa0340e8
+version: ""
+
