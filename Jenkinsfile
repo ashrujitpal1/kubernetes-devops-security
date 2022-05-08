@@ -20,14 +20,14 @@ pipeline {
 	     }
       }   
       stage('Docker build and push') {
-            steps {
-              
-              withDockerRegistry(credentialsId: "docker-hub", url: "") {
-              		sh 'printenv'
-              		sh 'docker build -t ashrujitpal/numeric-app:""$GIT_COMMIT"" .'
-              		sh 'docker push ashrujitpal/numeric-app:""$GIT_COMMIT""'
-                }
-            }
+          steps {
+            
+            withDockerRegistry(credentialsId: "docker-hub", url: "") {
+            		sh 'printenv'
+            		sh 'docker build -t ashrujitpal/numeric-app:""$GIT_COMMIT"" .'
+            		sh 'docker push ashrujitpal/numeric-app:""$GIT_COMMIT""'
+              }
+          }
         } 
       stage('Kubernetes Deployment - DEV') {
             steps {
@@ -37,6 +37,16 @@ pipeline {
               		sh "kubectl apply -f k8s_deployment_service.yaml" 
                 }
             }
-        }  
+        } 
+      stage('Mutation Tests - PIT') {
+		      steps {
+		        sh "mvn org.pitest:pitest-maven:mutationCoverage"
+		      }
+		      post {
+		        always {
+		          pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+		        }
+		      }
+		    }   
     }
 }
